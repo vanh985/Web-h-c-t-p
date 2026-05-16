@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Note & Quiz – Ghi chú + Flashcard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ====== HEADER ====== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">NoteQuiz</span>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" data-tab="notes">📝 Ghi Chú</button>
+        <button class="nav-btn" data-tab="flashcards">🃏 Flashcard</button>
+        <button class="nav-btn" data-tab="quiz">🎯 Quiz</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- ====== TAB: GHI CHÚ ====== -->
+    <section id="tab-notes" class="tab-content active">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Ghi Chú</h1>
+          <p class="section-sub">Lưu kiến thức theo từng môn học</p>
+        </div>
+        <button class="btn-primary" id="btn-open-note-form">+ Thêm ghi chú</button>
+      </div>
+
+      <!-- Form thêm ghi chú -->
+      <div class="card form-card" id="note-form" style="display:none">
+        <h3 class="form-title">✏️ Ghi chú mới</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Môn học</label>
+            <input type="text" id="note-subject" placeholder="Ví dụ: Toán, Lý, Tiếng Anh..." />
+          </div>
+          <div class="form-group">
+            <label>Tiêu đề</label>
+            <input type="text" id="note-title" placeholder="Tên chủ đề..." />
+          </div>
+          <div class="form-group full-width">
+            <label>Nội dung</label>
+            <textarea id="note-content" rows="4" placeholder="Viết nội dung ghi chú..."></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" id="btn-cancel-note">Hủy</button>
+          <button class="btn-primary" id="btn-save-note">Lưu ghi chú</button>
+        </div>
+      </div>
+
+      <!-- Lọc theo môn -->
+      <div class="filter-bar">
+        <span class="filter-label">Lọc:</span>
+        <div id="notes-subject-filters" class="filter-chips">
+          <button class="chip active" data-subject="">Tất cả</button>
+        </div>
+      </div>
+
+      <!-- Danh sách ghi chú -->
+      <div id="notes-list" class="notes-grid"></div>
+    </section>
+
+    <!-- ====== TAB: FLASHCARD ====== -->
+    <section id="tab-flashcards" class="tab-content">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Flashcard</h1>
+          <p class="section-sub">Nhấn vào thẻ để xem đáp án</p>
+        </div>
+        <button class="btn-primary" id="btn-open-card-form">+ Thêm thẻ</button>
+      </div>
+
+      <!-- Form thêm flashcard -->
+      <div class="card form-card" id="card-form" style="display:none">
+        <h3 class="form-title">🃏 Flashcard mới</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Môn học</label>
+            <input type="text" id="card-subject" placeholder="Ví dụ: Toán, Anh..." />
+          </div>
+          <div class="form-group">
+            <label>Mặt trước (câu hỏi)</label>
+            <input type="text" id="card-front" placeholder="Đặt câu hỏi..." />
+          </div>
+          <div class="form-group full-width">
+            <label>Mặt sau (đáp án)</label>
+            <textarea id="card-back" rows="3" placeholder="Đáp án..."></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-ghost" id="btn-cancel-card">Hủy</button>
+          <button class="btn-primary" id="btn-save-card">Lưu thẻ</button>
+        </div>
+      </div>
+
+      <!-- Lọc theo môn -->
+      <div class="filter-bar">
+        <span class="filter-label">Lọc:</span>
+        <div id="cards-subject-filters" class="filter-chips">
+          <button class="chip active" data-subject="">Tất cả</button>
+        </div>
+      </div>
+
+      <!-- Danh sách flashcard -->
+      <div id="flashcards-list" class="cards-grid"></div>
+    </section>
+
+    <!-- ====== TAB: QUIZ ====== -->
+    <section id="tab-quiz" class="tab-content">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Quiz</h1>
+          <p class="section-sub">Kiểm tra kiến thức của bạn</p>
+        </div>
+      </div>
+
+      <!-- Màn hình cài đặt quiz -->
+      <div id="quiz-setup" class="card quiz-setup-card">
+        <div class="quiz-setup-icon">🎯</div>
+        <h2>Bắt đầu Quiz</h2>
+        <p>Trả lời các câu hỏi từ flashcard của bạn</p>
+        <div class="quiz-options">
+          <div class="form-group">
+            <label>Số câu hỏi</label>
+            <select id="quiz-count">
+              <option value="3">3 câu</option>
+              <option value="5" selected>5 câu</option>
+              <option value="10">10 câu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Môn học</label>
+            <select id="quiz-subject">
+              <option value="">Tất cả môn</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary btn-lg" id="btn-start-quiz">🚀 Bắt đầu!</button>
+      </div>
+
+      <!-- Màn hình chơi quiz -->
+      <div id="quiz-playing" style="display:none">
+        <div class="quiz-progress-bar">
+          <div id="quiz-progress-fill" class="quiz-progress-fill"></div>
+        </div>
+        <div class="quiz-info">
+          <span id="quiz-counter">Câu 1 / 5</span>
+          <span id="quiz-score-display">Đúng: 0</span>
+        </div>
+        <div class="card quiz-question-card">
+          <div class="quiz-subject-badge" id="quiz-q-subject"></div>
+          <h2 id="quiz-question"></h2>
+          <textarea id="quiz-answer" placeholder="Nhập câu trả lời của bạn..." rows="3"></textarea>
+          <button class="btn-primary" id="btn-check-answer">Kiểm tra đáp án</button>
+          <div id="quiz-result" class="quiz-result" style="display:none">
+            <div class="result-label" id="result-label"></div>
+            <div class="correct-answer">
+              <span class="correct-answer-label">Đáp án đúng:</span>
+              <span id="correct-answer-text"></span>
+            </div>
+            <button class="btn-primary" id="btn-next-question">Câu tiếp →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Màn hình kết quả -->
+      <div id="quiz-result-screen" class="card quiz-result-card" style="display:none">
+        <div id="result-emoji" class="result-big-emoji"></div>
+        <h2 id="result-title"></h2>
+        <div class="result-score">
+          <span id="result-correct"></span>
+          <span class="result-divider">/</span>
+          <span id="result-total"></span>
+        </div>
+        <p id="result-message"></p>
+        <button class="btn-primary btn-lg" id="btn-retry-quiz">🔄 Chơi lại</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast thông báo -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/notes.js"></script>
+  <script src="js/flashcards.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
